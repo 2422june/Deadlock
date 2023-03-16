@@ -37,7 +37,7 @@ public class SoundManager : ManagerBase
     {
         for (int i = 1; i <= _speakers.Length; i++)
         {
-            _speakers[i - 1] = Manager._train._speakers.Find($"speaker{i}").GetComponent<Speaker>();
+            _speakers[i - 1] = Manager._trainFinder._speakers.Find($"speaker{i}").GetComponent<Speaker>();
         }
     }
 

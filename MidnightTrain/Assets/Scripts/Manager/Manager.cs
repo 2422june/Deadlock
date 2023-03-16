@@ -6,7 +6,8 @@ public class Manager : MonoBehaviour
 {
     public static GameManager _game;
     public static SoundManager _sound;
-    public static TrainFinder _train;
+    public static TrainFinder _trainFinder;
+    public static TrainController _train;
 
     T Init<T>() where T : ManagerBase
     {
@@ -19,7 +20,8 @@ public class Manager : MonoBehaviour
     void Awake()
     {
         _game = Init<GameManager>();
-        _train = Init<TrainFinder>();
+        _trainFinder = Init<TrainFinder>();
+        _train = Init<TrainController>();
         _sound = Init<SoundManager>();
     }
 }
