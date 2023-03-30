@@ -148,6 +148,8 @@ namespace Oculus.Interaction
             // Position our transformation at our button base plus
             // the most pressed in distance along the normal plus
             // the original planar offset of the button from the button base
+
+            //버튼 눌림 위치
             transform.position = _buttonBaseTransform.position +
                                  _buttonBaseTransform.forward * (-1f * closestDistance) +
                                  _buttonBaseTransform.right * _planarOffset.x +
