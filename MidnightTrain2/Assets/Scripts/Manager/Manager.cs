@@ -19,9 +19,9 @@ public class Manager : MonoBehaviour
 
     void Awake()
     {
-        _game = Init<GameManager>();
-        _trainFinder = Init<TrainFinder>();
-        _train = Init<TrainController>();
-        _sound = Init<SoundManager>();
+        //_game = Init<GameManager>();
+        //_trainFinder = Init<TrainFinder>();
+        //_train = Init<TrainController>();
+        //_sound = Init<SoundManager>();
     }
 }
