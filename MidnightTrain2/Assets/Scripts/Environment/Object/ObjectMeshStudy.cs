@@ -25,6 +25,10 @@ public class ObjectMeshStudy : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        
+
+        foreach(ContactPoint point in collision.contacts)
+        {
+            Debug.Log("Trigger : " + point.point);
+        }
     }
 }
