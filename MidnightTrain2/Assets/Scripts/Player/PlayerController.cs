@@ -30,11 +30,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Vector3 _rightPos, _leftPos;
 
+    [SerializeField]
+    private GameObject _wall;
+
     private int _state = 0;
     private float timer = 3;
 
     [SerializeField]
-    private TMP_Text text;
+    private GameObject _canvas;
+    private TMP_Text _systemMessage;
 
     // »ó´ë ÁÂÇ¥(L - R)
     public Vector3[] _selectPos = new Vector3[2];
@@ -44,6 +48,19 @@ public class PlayerController : MonoBehaviour
     public Vector3[] _straightMovePos = new Vector3[2];
 
     private bool isActive;
+
+    private void Start()
+    {
+        _wall = GameObject.Find("Wall");
+        _canvas = GameObject.Find("UI");
+        _systemMessage = _canvas.transform.Find("SystemMessage").GetComponent<TMP_Text>();
+        StartCoroutine(Tutorial());
+    }
+
+    private IEnumerator Tutorial()
+    {
+        yield return new WaitForSeconds(3);
+    }
 
     void Update()
     {
