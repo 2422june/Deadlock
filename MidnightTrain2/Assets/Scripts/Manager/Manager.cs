@@ -6,7 +6,8 @@ public class Manager : MonoBehaviour
 {
     public static GameManager _game;
     public static SoundManager _sound;
-    public static TrainFinder _trainFinder;
+    public static FindManager _find;
+    public static Transform _player;
 
     T Init<T>() where T : ManagerBase
     {
@@ -18,7 +19,9 @@ public class Manager : MonoBehaviour
 
     void Awake()
     {
-        //_game = Init<GameManager>();
+        _find = Init<FindManager>();
+        _game = Init<GameManager>();
+        _player = _find.FindObject("Player");
         //_trainFinder = Init<TrainFinder>();
         //_train = Init<TrainController>();
         //_sound = Init<SoundManager>();

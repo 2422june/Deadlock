@@ -13,4 +13,10 @@ public class Define
     {
         None = 0,
     }
+
+    public struct CarInfo
+    {
+        public Vector3 start, center, center2, end;
+        public Vector3 dir;
+    }
 }
