@@ -35,8 +35,9 @@ public class CarController : MonoBehaviour
         _moveSpeed = 10f;
         _pathIndex = 0;
 
-        Vector3 dir = Vector3.zero;
+        Vector3 dir = transform.rotation.eulerAngles;
         dir.z = arrowDir * -90;
+
         _arrow = transform.Find("Arrow");
         _arrow.rotation = Quaternion.Euler(dir);
 
@@ -84,6 +85,7 @@ public class CarController : MonoBehaviour
         if(other.CompareTag("Car"))
         {
             _isMovable = false;
+            Manager._game._isAccident = true;
         }
     }
 }

@@ -39,8 +39,9 @@ public class GameManager : ManagerBase
 
     private List<string> _parents = new List<string>();
     [SerializeField]
-    private Button _startButton, _endButton, _goButton;
-    private TMP_Text _startButtonTxt, _endButtonTxt, _goButtonTxt;
+    private Button _startButton, _endButton, _goButton, _accidentButton;
+    private TMP_Text _startButtonTxt, _endButtonTxt;
+    public bool _isAccident;
 
     int _startButtonDir, _endButtonDir;
 
@@ -60,6 +61,7 @@ public class GameManager : ManagerBase
         _startButton = Manager._find.FindUI<Button>("Start");
         _endButton = Manager._find.FindUI<Button>("End");
         _goButton = Manager._find.FindUI<Button>("Go");
+        _accidentButton = Manager._find.FindUI<Button>("Accident");
 
         _startButtonTxt = _startButton.GetComponentInChildren<TMP_Text>();
         _endButtonTxt = _endButton.GetComponentInChildren<TMP_Text>();
@@ -67,9 +69,14 @@ public class GameManager : ManagerBase
         _startButton.onClick.AddListener(OnClickStartButton);
         _endButton.onClick.AddListener(OnClickEndButton);
         _goButton.onClick.AddListener(OnClickGoButton);
+        _accidentButton.onClick.AddListener(OnClickAccidentButton);
 
         _startButtonDir = 0;
         _endButtonDir = 1;
+        _startButtonTxt.text = GetDirText(_startButtonDir);
+        _endButtonTxt.text = GetDirText(_endButtonDir);
+
+        _isAccident = false;
     }
 
     private void OnClickStartButton()
@@ -77,19 +84,25 @@ public class GameManager : ManagerBase
         _startButtonDir = (_startButtonDir + 1) % 4;
         if(_startButtonDir == _endButtonDir)
         {
-            _startButtonDir++;
+            _startButtonDir  = (_startButtonDir + 1) % 4;
         }
         _startButtonTxt.text = GetDirText(_startButtonDir);
     }
 
     private void OnClickEndButton()
     {
-        _startButtonDir = (_startButtonDir + 1) % 4;
+        _endButtonDir = (_endButtonDir + 1) % 4;
         if (_endButtonDir == _startButtonDir)
         {
-            _endButtonDir++;
+            _endButtonDir = (_endButtonDir + 1) % 4;
         }
         _endButtonTxt.text = GetDirText(_endButtonDir);
+    }
+
+    private void OnClickAccidentButton()
+    {
+        CreateCar(PathType.UP2Right);
+        CreateCar(PathType.Down2Left);
     }
 
     private string GetDirText(int dir)
@@ -111,9 +124,69 @@ public class GameManager : ManagerBase
 
     private void OnClickGoButton()
     {
-        int dir = (_startButtonDir * 3);
-        dir += _endButtonDir;
-        CreateCar((PathType)dir);
+        PathType dir = 0;
+        int startDir = _startButtonDir;
+        int endDir = _endButtonDir;
+        switch (startDir)
+        {
+            case 0:
+                if (endDir == 1)
+                {
+                    dir = PathType.UP2Right;
+                }
+                if (endDir == 2)
+                {
+                    dir = PathType.UP2Down;
+                }
+                if (endDir == 3)
+                {
+                    dir = PathType.UP2Left;
+                }
+                break;
+            case 1:
+                if (endDir == 0)
+                {
+                    dir = PathType.Right2Up;
+                }
+                if (endDir == 2)
+                {
+                    dir = PathType.Right2Down;
+                }
+                if (endDir == 3)
+                {
+                    dir = PathType.Right2Left;
+                }
+                break;
+            case 2:
+                if (endDir == 0)
+                {
+                    dir = PathType.Down2Up;
+                }
+                if (endDir == 1)
+                {
+                    dir = PathType.Down2Right;
+                }
+                if (endDir == 3)
+                {
+                    dir = PathType.Down2Left;
+                }
+                break;
+            case 3:
+                if (endDir == 0)
+                {
+                    dir = PathType.Left2Up;
+                }
+                if (endDir == 1)
+                {
+                    dir = PathType.Left2Right;
+                }
+                if (endDir == 2)
+                {
+                    dir = PathType.Left2Down;
+                }
+                break;
+        }
+        CreateCar(dir);
     }
 
     private void SetPoint()
@@ -224,24 +297,21 @@ public class GameManager : ManagerBase
            CreateCar(_pathType);
             _pathType = PathType.None;
         }
-
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            CreateCar(PathType.UP2Right);
-            CreateCar(PathType.Down2Left);
-        }
     }
 
     private void CreateCar(PathType type)
     {
+        if (_isAccident)
+            return;
+
         int arrowDir = 0;
         switch(type)
         {
             case PathType.UP2Left:
-                arrowDir = -1;
+                arrowDir = 1;
                 break;
             case PathType.UP2Right:
-                arrowDir = 1;
+                arrowDir = -1;
                 break;
             case PathType.Left2Up:
                 arrowDir = -1;
