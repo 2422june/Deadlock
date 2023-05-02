@@ -12,9 +12,9 @@ public class CarController : MonoBehaviour
     private Transform _arrow;
 
     float _rotStep;
-    float destRot;
-    float rotValue;
-    float moveStep;
+    float _destRot;
+    float _rotValue;
+    float _moveStep;
 
     [SerializeField]
     private int _pathIndex;
@@ -50,14 +50,13 @@ public class CarController : MonoBehaviour
         if (!_isMovable)
             return;
 
-        /*destRot = Mathf.Atan2(_path[_pathIndex].z - transform.position.z, _path[_pathIndex].x - transform.position.x);
-        rotValue = destRot - _rot.y;
-        moveStep = Vector3.Distance(transform.position, _path[_pathIndex]) / (_moveSpeed * Time.deltaTime);
-        _rotStep = rotValue / moveStep;
-
-        _rot.y += _rotStep * Time.deltaTime;
-        transform.rotation = Quaternion.Euler(_rot);*/
+        //_destRot = 90 - Mathf.Atan2((_path[_pathIndex] - transform.position).z, (_path[_pathIndex] - transform.position).x);
+        //_rot.y = _destRot;
+        //_rot = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_rot), 1f).eulerAngles;
+        //transform.rotation = Quaternion.Euler(_rot);
         transform.LookAt(_path[_pathIndex]);
+
+
         transform.position += transform.forward * _moveSpeed * Time.deltaTime;
 
         if (Vector3.Distance(_path[_pathIndex], transform.position) <= 0.1f)
@@ -69,7 +68,7 @@ public class CarController : MonoBehaviour
     private void SetNextDestination()
     {
         transform.position = _path[_pathIndex];
-        transform.LookAt(_path[_pathIndex]);
+        //transform.LookAt(_path[_pathIndex]);
         _rot = transform.rotation.eulerAngles;
         _pathIndex++;
 
@@ -80,12 +79,15 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if(other.CompareTag("Car"))
+        if(collision.transform.CompareTag("Car"))
         {
             _isMovable = false;
             Manager._game._isAccident = true;
+            GameObject source = Resources.Load<GameObject>("Prefabs/Explosion");
+            GameObject go = Instantiate(source, collision.contacts[0].point, Quaternion.identity);
+            GetComponent<Rigidbody>().useGravity = true;
         }
     }
 }
