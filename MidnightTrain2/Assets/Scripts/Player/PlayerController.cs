@@ -4,7 +4,6 @@ using UnityEngine;
 using Oculus.Interaction;
 using TMPro;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 /**
 * https://0bsoletelab.itch.io/halt-vr-traffic-officer-simulator
 * 
@@ -138,6 +137,7 @@ public class PlayerController : MonoBehaviour
                     timer = 3;
                     isActive = false;
                     StartCoroutine(Tutorial());
+                    StopCoroutine(Tutorial());
                 }
             }
         }
