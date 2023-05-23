@@ -26,26 +26,21 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private Transform _leftController, _rightController;
-
-    [SerializeField]
     private Vector3 _rightPos, _leftPos;
+    private Vector3 _rightDir, _leftDir;
+    private LineRenderer _rightLine, _leftLine;
+    private float _radius;
+
+    private RaycastHit _leftHit, _rightHit;
+    private Vector3 _leftHitPoint, _rightHitPoint;
+    private Ray _leftRay, _rightRay;
 
     [SerializeField]
     private GameObject _wall;
 
-    private int _state = 0;
-    private float timer = 3;
-    private WaitForSeconds _second = new WaitForSeconds(1);
-    private WaitForSeconds _two = new WaitForSeconds(2);
-
     [SerializeField]
     private GameObject _canvas;
     private TMP_Text _systemMessage;
-
-    // 상대 좌표(L - R)
-    public Vector3[] _forwardPos = new Vector3[2];
-    public Vector3[] _openPos = new Vector3[2];
-    public Vector3[] _gatherPos = new Vector3[2];
 
     private bool isActive;
 
@@ -54,94 +49,80 @@ public class PlayerController : MonoBehaviour
         _wall = GameObject.Find("Wall");
         _canvas = GameObject.Find("UIs");
         _systemMessage = _canvas.transform.Find("SystemMessage").GetComponent<TMP_Text>();
-        _systemMessage.text = "게임을 시작하는중";
+
+        _rightLine = _rightController.GetComponent<LineRenderer>();
+        _leftLine = _leftController.GetComponent<LineRenderer>();
+
+        _radius = 10f;
 
         isActive = false;
-        _state = 0;
-
-        StartCoroutine(Tutorial());
-    }
-
-    private IEnumerator Tutorial()
-    {
-        if (_state == 0)
-        {
-            yield return new WaitForSeconds(3);
-            _systemMessage.text = "튜토리얼을 시작하겠습니다.";
-            yield return _two;
-            _systemMessage.text = "먼저 동작 인식이 있겠습니다.";
-            yield return _two;
-            _systemMessage.text = "양손을 앞으로 적당히 뻗고 A와 X를 눌러주세요.";
-            isActive = true;
-        }
-        else if (_state == 1)
-        {
-            yield return _two;
-            _systemMessage.text = "양손을 적당히 벌리고 A와 X를 눌러주세요.";
-            isActive = true;
-        }
-        else if (_state == 2)
-        {
-            yield return _two;
-            _systemMessage.text = "벽을 밀듯이 양손을 가슴 앞에 모으고 A와 X를 눌러주세요.";
-            isActive = true;
-        }
-        else if (_state == 3)
-        {
-            yield return _two;
-            _systemMessage.text = "동작 인식이 완료 되었습니다.";
-            yield return _two;
-            _systemMessage.text = "무사고의 시간 되시길 바랍니다.";
-            Debug.Log(_forwardPos[0] + " : " + _forwardPos[1]);
-            Debug.Log(_openPos[0] + " : " + _openPos[1]);
-            Debug.Log(_gatherPos[0] + " : " + _gatherPos[1]);
-        }
-    }
-
-    private void SetGesturePos()
-    {
-        switch (_state)
-        {
-            case 0:
-                _forwardPos[0] = _leftPos;
-                _forwardPos[1] = _rightPos;
-                break;
-            case 1:
-                _openPos[0] = _leftPos;
-                _openPos[1] = _rightPos;
-                break;
-            case 2:
-                _gatherPos[0] = _leftPos;
-                _gatherPos[1] = _rightPos;
-                break;
-        }
-        _systemMessage.text = "저장완료";
     }
     
 
     void Update()
     {
+        SetHandPos();
+        SetHandDir();
+        SetRay();
+
+        ShotRay();
+        DrawHandLine();
+
         if (isActive)
         {
-            _rightPos = _rightController.localPosition;
-            _leftPos = _leftController.localPosition;
-
             if (OVRInput.Get(OVRInput.RawButton.A) && OVRInput.Get(OVRInput.RawButton.X))
             {
-                _systemMessage.text = $"인식중 ({(int)timer}초 남음)";
-                timer -= Time.deltaTime;
-                if(timer <= 0)
-                {
-                    SetGesturePos();
-                    _state++;
-                    timer = 3;
-                    isActive = false;
-                    StartCoroutine(Tutorial());
-                    StopCoroutine(Tutorial());
-                }
             }
         }
+    }
 
+    void SetHandPos()
+    {
+        _rightPos = _rightController.position;
+        _leftPos = _leftController.position;
+    }
 
+    void SetHandDir()
+    {
+        _rightDir = (_rightController.forward);
+        _leftDir = (_leftController.forward);
+    }
+
+    void SetRay()
+    {
+        _rightRay.origin = _rightPos;
+        _rightRay.direction = _rightDir;
+
+        _leftRay.origin = _leftPos;
+        _leftRay.direction = _leftDir;
+    }
+
+    void ShotRay()
+    {
+        _rightHitPoint = _rightDir * _radius;
+        if (Physics.Raycast(_rightRay, out _rightHit, _radius))
+        {
+            _rightHitPoint = _rightHit.point;
+        }
+
+        _leftHitPoint = _leftDir * _radius;
+        if (Physics.Raycast(_leftRay, out _leftHit, _radius))
+        {
+            _leftHitPoint = _leftHit.point;
+        }
+    }
+
+    void DrawHandLine()
+    {
+        _rightLine.SetPosition(0, _rightPos);
+        _rightLine.SetPosition(1, _rightHitPoint);
+
+        _leftLine.SetPosition(0, _leftPos);
+        _leftLine.SetPosition(1, _leftHitPoint);
+    }
+
+    void ReturnHitInfo()
+    {
+        
     }
 }
