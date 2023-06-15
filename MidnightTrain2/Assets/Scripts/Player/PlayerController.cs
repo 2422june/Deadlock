@@ -26,14 +26,6 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private Transform _leftController, _rightController;
-    private Vector3 _rightPos, _leftPos;
-    private Vector3 _rightDir, _leftDir;
-    private LineRenderer _rightLine, _leftLine;
-    private float _radius;
-
-    private RaycastHit _leftHit, _rightHit;
-    private Vector3 _leftHitPoint, _rightHitPoint;
-    private Ray _leftRay, _rightRay;
 
     [SerializeField]
     private GameObject _wall;
@@ -48,12 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         _wall = GameObject.Find("Wall");
         _canvas = GameObject.Find("UIs");
-        _systemMessage = _canvas.transform.Find("SystemMessage").GetComponent<TMP_Text>();
+        //_systemMessage = _canvas.transform.Find("SystemMessage").GetComponent<TMP_Text>();
 
-        _rightLine = _rightController.GetComponent<LineRenderer>();
-        _leftLine = _leftController.GetComponent<LineRenderer>();
-
-        _radius = 10f;
 
         isActive = false;
     }
@@ -61,64 +49,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        SetHandPos();
-        SetHandDir();
-        SetRay();
 
-        ShotRay();
-        DrawHandLine();
-
-        if (isActive)
-        {
-            if (OVRInput.Get(OVRInput.RawButton.A) && OVRInput.Get(OVRInput.RawButton.X))
-            {
-            }
-        }
-    }
-
-    void SetHandPos()
-    {
-        _rightPos = _rightController.position;
-        _leftPos = _leftController.position;
-    }
-
-    void SetHandDir()
-    {
-        _rightDir = (_rightController.forward);
-        _leftDir = (_leftController.forward);
-    }
-
-    void SetRay()
-    {
-        _rightRay.origin = _rightPos;
-        _rightRay.direction = _rightDir;
-
-        _leftRay.origin = _leftPos;
-        _leftRay.direction = _leftDir;
-    }
-
-    void ShotRay()
-    {
-        _rightHitPoint = _rightPos + (_rightDir * _radius);
-        if (Physics.Raycast(_rightRay, out _rightHit, _radius))
-        {
-            _rightHitPoint = _rightHit.point;
-        }
-
-        _leftHitPoint = _leftPos + (_leftDir * _radius);
-        if (Physics.Raycast(_leftRay, out _leftHit, _radius))
-        {
-            _leftHitPoint = _leftHit.point;
-        }
-    }
-
-    void DrawHandLine()
-    {
-        _rightLine.SetPosition(0, _rightPos);
-        _rightLine.SetPosition(1, _rightHitPoint);
-
-        _leftLine.SetPosition(0, _leftPos);
-        _leftLine.SetPosition(1, _leftHitPoint);
     }
 
     void ReturnHitInfo()

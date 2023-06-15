@@ -63,16 +63,16 @@ public class PathManager : ManagerBase
         _startButtonTxt.text = GetDirText(_startButtonDir);
         _endButtonTxt.text = GetDirText(_endButtonDir);
 
-        Manager._game.SetPath(_points);
+        Manager._game.SetPath(_carInfos);
     }
 
     private void InitButton()
     {
         string[] parents = { "TestButton" };
-        _startButton = Manager._find.FindUI<Button>("Start", parents);
-        _endButton = Manager._find.FindUI<Button>("End", parents);
-        _goButton = Manager._find.FindUI<Button>("Go", parents);
-        _accidentButton = Manager._find.FindUI<Button>("Accident", parents);
+        _startButton = Manager._find.FindUI<Button>("Start", parents, Manager._player);
+        _endButton = Manager._find.FindUI<Button>("End", parents, Manager._player);
+        _goButton = Manager._find.FindUI<Button>("Go", parents, Manager._player);
+        _accidentButton = Manager._find.FindUI<Button>("Accident", parents, Manager._player);
 
         _startButton.onClick.AddListener(OnClickStartButton);
         _endButton.onClick.AddListener(OnClickEndButton);

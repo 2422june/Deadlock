@@ -6,10 +6,15 @@ using TMPro;
 
 public class GameManager : ManagerBase
 {
-    private List<GameObject> _upCars, _rightCars, _leftCars, _downCars = new List<GameObject>();
+    private List<GameObject> _upCars = new List<GameObject>();
+    private List<GameObject> _rightCars = new List<GameObject>();
+    private List<GameObject> _leftCars = new List<GameObject>();
+    private List<GameObject> _downCars = new List<GameObject>();
     private GameObject _car;
 
     private Define.CarInfo[] _carInfos = new Define.CarInfo[12];
+    private bool _isSetInfos;
+    private float _timer;
 
     private enum PathType
     {
@@ -31,24 +36,32 @@ public class GameManager : ManagerBase
         _leftCars.Clear();
         _downCars.Clear();
 
-        _isAccident = false;
+        _timer = 0;
 
-        StartCoroutine(Cycle());
+        _isAccident = false;
     }
 
-    IEnumerator Cycle()
+    private void Update()
     {
-        while(true)
+        if(_isSetInfos)
         {
-            yield return new WaitForSeconds(Random.Range(0, 3));
-            _pathType = SetPathType(Random.Range(0, 3), Random.Range(0, 3));
-            CreateCar(_pathType);
+            if(_timer <= 0)
+            {
+                _timer = Random.Range(0.5f, 1.5f);
+                _pathType = SetPathType(Random.Range(0, 4), Random.Range(0, 4));
+                CreateCar(_pathType);
+            }
+            else
+            {
+                _timer -= Time.deltaTime;
+            }
         }
     }
 
     public void SetPath(Define.CarInfo[] arr)
     {
         _carInfos = arr;
+        _isSetInfos = true;
     }
 
 

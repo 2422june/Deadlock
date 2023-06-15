@@ -17,9 +17,13 @@ public class FindManager : ManagerBase
         _uiRoot = GameObject.Find("@UIs").transform;
     }
 
-    public T FindUI<T>(string name, string[] parents = null) where T : UIBehaviour
+    public T FindUI<T>(string name, string[] parents = null, Transform root = null) where T : UIBehaviour
     {
-        Transform target = _uiRoot;
+        Transform target = root;
+        if (target == null)
+        {
+            target = _uiRoot;
+        }
 
         if (parents != null)
         {
