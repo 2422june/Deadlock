@@ -99,13 +99,13 @@ public class PlayerController : MonoBehaviour
 
     void ShotRay()
     {
-        _rightHitPoint = _rightDir * _radius;
+        _rightHitPoint = _rightPos + (_rightDir * _radius);
         if (Physics.Raycast(_rightRay, out _rightHit, _radius))
         {
             _rightHitPoint = _rightHit.point;
         }
 
-        _leftHitPoint = _leftDir * _radius;
+        _leftHitPoint = _leftPos + (_leftDir * _radius);
         if (Physics.Raycast(_leftRay, out _leftHit, _radius))
         {
             _leftHitPoint = _leftHit.point;

@@ -14,16 +14,16 @@ public class FindManager : ManagerBase
     public override void Init()
     {
         _dynamicRoot = GameObject.Find("@DynamicObjects").transform;
-        _uiRoot = _dynamicRoot.Find("UIs");
+        _uiRoot = GameObject.Find("@UIs").transform;
     }
 
-    public T FindUI<T>(string name, List<string> parents = null) where T : UIBehaviour
+    public T FindUI<T>(string name, string[] parents = null) where T : UIBehaviour
     {
         Transform target = _uiRoot;
 
         if (parents != null)
         {
-            for (int i = 0; i < parents.Count; i++)
+            for (int i = 0; i < parents.Length; i++)
             {
                 target = target.Find(parents[i]);
             }
@@ -40,13 +40,13 @@ public class FindManager : ManagerBase
         return result;
     }
 
-    public Transform FindObject(string name, List<string> parents = null)
+    public Transform FindObject(string name, string[] parents = null)
     {
         Transform target = _dynamicRoot;
 
         if (parents != null)
         {
-            for (int i = 0; i < parents.Count; i++)
+            for (int i = 0; i < parents.Length; i++)
             {
                 target = target.Find(parents[i]);
             }

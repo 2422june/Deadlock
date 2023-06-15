@@ -19,4 +19,6 @@ public class Define
         public Vector3 start, center, center2, end;
         public Vector3 dir;
     }
+
+    public static string CarSourcePath = "Prefabs/Car";
 }
