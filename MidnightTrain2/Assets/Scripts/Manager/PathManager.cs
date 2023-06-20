@@ -17,17 +17,6 @@ public class PathManager : ManagerBase
         Down2Up = 6, Down2Right = 7, Down2Left = 8,
         Left2Up = 9, Left2Right = 10, Left2Down = 11;
 
-    private enum PathType
-    {
-        UP2Down = 0, UP2Right = 1, UP2Left = 2,
-        Right2Up = 3, Right2Down = 4, Right2Left = 5,
-        Down2Up = 6, Down2Right = 7, Down2Left = 8,
-        Left2Up = 9, Left2Right = 10, Left2Down = 11,
-        None = 12
-    }
-    [SerializeField]
-    private PathType _pathType = PathType.None;
-
     int SpawnPoint = 1,
         centerPoint = 2,
         EndPoint = 3;

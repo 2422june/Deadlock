@@ -6,8 +6,16 @@ public class Define
 {
     public enum CatingType
     {
-        Button,
-        InputField,
+        RoadButton
+    }
+
+    public enum PathType
+    {
+        UP2Down = 0, UP2Right = 1, UP2Left = 2,
+        Right2Up = 3, Right2Down = 4, Right2Left = 5,
+        Down2Up = 6, Down2Right = 7, Down2Left = 8,
+        Left2Up = 9, Left2Right = 10, Left2Down = 11,
+        None = 12
     }
 
     public enum BGM

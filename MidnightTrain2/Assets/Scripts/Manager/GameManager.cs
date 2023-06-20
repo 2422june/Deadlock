@@ -16,18 +16,11 @@ public class GameManager : ManagerBase
     private bool _isSetInfos;
     private float _timer;
 
-    private enum PathType
-    {
-        UP2Down = 0, UP2Right = 1, UP2Left = 2,
-        Right2Up = 3, Right2Down = 4, Right2Left = 5,
-        Down2Up = 6, Down2Right = 7, Down2Left = 8,
-        Left2Up = 9, Left2Right = 10, Left2Down = 11,
-        None = 12
-    }
-
-    private PathType _pathType = PathType.None;
+    private Define.PathType _pathType = Define.PathType.None;
 
     public bool _isAccident;
+
+    public int _start, _end;
 
     public override void Init()
     {
@@ -65,9 +58,9 @@ public class GameManager : ManagerBase
     }
 
 
-    private PathType SetPathType(int _startDir, int _endDir)
+    private Define.PathType SetPathType(int _startDir, int _endDir)
     {
-        PathType dir = 0;
+        Define.PathType dir = 0;
         int startDir = _startDir;
         int endDir = _endDir;
         switch (startDir)
@@ -75,64 +68,64 @@ public class GameManager : ManagerBase
             case 0:
                 if (endDir == 1)
                 {
-                    dir = PathType.UP2Right;
+                    dir = Define.PathType.UP2Right;
                 }
                 if (endDir == 2)
                 {
-                    dir = PathType.UP2Down;
+                    dir = Define.PathType.UP2Down;
                 }
                 if (endDir == 3)
                 {
-                    dir = PathType.UP2Left;
+                    dir = Define.PathType.UP2Left;
                 }
                 break;
             case 1:
                 if (endDir == 0)
                 {
-                    dir = PathType.Right2Up;
+                    dir = Define.PathType.Right2Up;
                 }
                 if (endDir == 2)
                 {
-                    dir = PathType.Right2Down;
+                    dir = Define.PathType.Right2Down;
                 }
                 if (endDir == 3)
                 {
-                    dir = PathType.Right2Left;
+                    dir = Define.PathType.Right2Left;
                 }
                 break;
             case 2:
                 if (endDir == 0)
                 {
-                    dir = PathType.Down2Up;
+                    dir = Define.PathType.Down2Up;
                 }
                 if (endDir == 1)
                 {
-                    dir = PathType.Down2Right;
+                    dir = Define.PathType.Down2Right;
                 }
                 if (endDir == 3)
                 {
-                    dir = PathType.Down2Left;
+                    dir = Define.PathType.Down2Left;
                 }
                 break;
             case 3:
                 if (endDir == 0)
                 {
-                    dir = PathType.Left2Up;
+                    dir = Define.PathType.Left2Up;
                 }
                 if (endDir == 1)
                 {
-                    dir = PathType.Left2Right;
+                    dir = Define.PathType.Left2Right;
                 }
                 if (endDir == 2)
                 {
-                    dir = PathType.Left2Down;
+                    dir = Define.PathType.Left2Down;
                 }
                 break;
         }
         return dir;
     }
 
-    private void CreateCar(PathType type)
+    private void CreateCar(Define.PathType type)
     {
         if (_isAccident)
             return;
@@ -140,28 +133,28 @@ public class GameManager : ManagerBase
         int arrowDir = 0;
         switch(type)
         {
-            case PathType.UP2Left:
+            case Define.PathType.UP2Left:
                 arrowDir = 1;
                 break;
-            case PathType.UP2Right:
+            case Define.PathType.UP2Right:
                 arrowDir = -1;
                 break;
-            case PathType.Left2Up:
+            case Define.PathType.Left2Up:
                 arrowDir = -1;
                 break;
-            case PathType.Left2Down:
+            case Define.PathType.Left2Down:
                 arrowDir = 1;
                 break;
-            case PathType.Right2Up:
+            case Define.PathType.Right2Up:
                 arrowDir = 1;
                 break;
-            case PathType.Right2Down:
+            case Define.PathType.Right2Down:
                 arrowDir = -1;
                 break;
-            case PathType.Down2Left:
+            case Define.PathType.Down2Left:
                 arrowDir = -1;
                 break;
-            case PathType.Down2Right:
+            case Define.PathType.Down2Right:
                 arrowDir = 1;
                 break;
         }

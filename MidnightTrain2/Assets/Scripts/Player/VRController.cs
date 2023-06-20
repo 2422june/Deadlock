@@ -20,10 +20,6 @@ public class VRController : MonoBehaviour
     private ObjectBase _castedComponent;
 
     private Define.CatingType _targetType;
-
-    private Button _button;
-
-    private InputField _inputField;
     #endregion
 
     private Vector3 _origin;
@@ -99,7 +95,7 @@ public class VRController : MonoBehaviour
         {
             _hitTransform = _hit.transform;
             DrawLaser(_hit.point);
-            //ObjectCasting();
+            ObjectCasting();
         }
         else
         {
@@ -127,21 +123,15 @@ public class VRController : MonoBehaviour
         if (_hitTransform.TryGetComponent(out _castedComponent))
         {
             _targetType = _castedComponent._type;
-            Debug.Log(_castedComponent._type);
         }
         _castedObject = _hitTransform;
     }
 
     private void ExitCasting()
     {
-        if (_targetType == Define.CatingType.Button)
+        if (_targetType == Define.CatingType.RoadButton)
         {
-            _button = null;
-        }
 
-        if (_targetType == Define.CatingType.InputField)
-        {
-            _inputField = null;
         }
         _castedObject = null;
     }
@@ -161,16 +151,9 @@ public class VRController : MonoBehaviour
         if (_castedComponent == null)
             return;
 
-        if (_targetType == Define.CatingType.Button)
+        if (_targetType == Define.CatingType.RoadButton)
         {
-            _button = _castedComponent.Button;
-            _button.onClick.Invoke();
-        }
 
-        if (_targetType == Define.CatingType.InputField)
-        {
-            _inputField = _castedComponent.InputField;
-            _inputField.ActivateInputField();
         }
     }
 
@@ -185,16 +168,9 @@ public class VRController : MonoBehaviour
         if (_castedComponent == null)
             return;
 
-        if (_targetType == Define.CatingType.Button)
+        if (_targetType == Define.CatingType.RoadButton)
         {
-            _button = _castedComponent.Button;
-            _button.OnPointerExit(null);
-            _button = null;
-        }
 
-        if (_targetType == Define.CatingType.InputField)
-        {
-            _inputField = null;
         }
         _castedObject = null;
     }
