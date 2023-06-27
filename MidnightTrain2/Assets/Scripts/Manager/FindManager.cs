@@ -44,6 +44,56 @@ public class FindManager : ManagerBase
         return result;
     }
 
+    public Transform FindUI(string name, string[] parents = null, Transform root = null)
+    {
+        Transform target = root;
+        if (target == null)
+        {
+            target = _uiRoot;
+        }
+
+        if (parents != null)
+        {
+            for (int i = 0; i < parents.Length; i++)
+            {
+                target = target.Find(parents[i]);
+            }
+        }
+        target = target.Find(name);
+
+        if (target == null)
+        {
+            Debug.Log("No Object");
+            return null;
+        }
+
+        return target;
+    }
+
+
+    public Transform FindUI(string name, string parent = null, Transform root = null)
+    {
+        Transform target = root;
+        if (target == null)
+        {
+            target = _uiRoot;
+        }
+
+        if (parent != null)
+        {
+            target = target.Find(parent);
+        }
+        target = target.Find(name);
+
+        if (target == null)
+        {
+            Debug.Log("No Object");
+            return null;
+        }
+
+        return target;
+    }
+
     public Transform FindObject(string name, string[] parents = null)
     {
         Transform target = _dynamicRoot;

@@ -6,8 +6,6 @@ using TMPro;
 
 public class PathManager : ManagerBase
 {
-    private GameObject _car;
-
     private Define.CarInfo[] _carInfos = new Define.CarInfo[12];
 
     int Up = 0, Right = 1, Down = 2, Left = 3;
@@ -34,7 +32,6 @@ public class PathManager : ManagerBase
 
     public override void Init()
     {
-
         _rootTransform = GameObject.Find("@DynamicObjects").transform;
 
         SetPoint();
@@ -109,7 +106,6 @@ public class PathManager : ManagerBase
 
         return "";
     }
-
 
     private void SetPoint()
     {

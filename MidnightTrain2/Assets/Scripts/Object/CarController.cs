@@ -20,8 +20,12 @@ public class CarController : MonoBehaviour
     private int _pathIndex;
     private bool _isMovable;
 
-    public void Init(Define.CarInfo info, int arrowDir)
+    private Define.PathType _type;
+
+    public void Init(Define.CarInfo info, Define.PathType type, int arrowDir)
     {
+        _type = type;
+
         _path[0] = info.start;
         _path[1] = info.center;
         _path[2] = info.center2;
@@ -55,9 +59,22 @@ public class CarController : MonoBehaviour
         //_rot = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_rot), 1f).eulerAngles;
         //transform.rotation = Quaternion.Euler(_rot);
         transform.LookAt(_path[_pathIndex]);
+        
+        Vector3 rayL, rayR, rayM;
+        rayL = transform.position + (Vector3.left * 0.2f);
+        rayR = transform.position + (Vector3.right * 0.2f);
+        rayM = transform.position;
 
+        if (Physics.Raycast(rayM, transform.forward, 1, 1 << 6) && !Manager._game.IsCanDrive(_type))
+        {
+            return;
+        }
 
-        transform.position += transform.forward * _moveSpeed * Time.deltaTime;
+        if (!Physics.Raycast(rayL, transform.forward, 1.7f, 1 << 3)
+            && !Physics.Raycast(rayR, transform.forward, 1.7f, 1 << 3))
+        {
+            transform.position += transform.forward * _moveSpeed * Time.deltaTime;
+        }
 
         if (Vector3.Distance(_path[_pathIndex], transform.position) <= 0.1f)
         {

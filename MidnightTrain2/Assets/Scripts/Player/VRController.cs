@@ -67,11 +67,11 @@ public class VRController : MonoBehaviour
     {
         if (_isRight)
         {
-            _triggerButton = OVRInput.RawButton.RIndexTrigger;
+            _triggerButton = OVRInput.RawButton.B;
         }
         else
         {
-            _triggerButton = OVRInput.RawButton.LIndexTrigger;
+            _triggerButton = OVRInput.RawButton.Y;
         }
     }
 
@@ -85,15 +85,15 @@ public class VRController : MonoBehaviour
         _dir = transform.forward;
         _origin = transform.position;
 
-        //if (OVRInput.GetDown(_triggerButton))
-        //{ GetDownTrigger(); }
+        if (OVRInput.GetDown(_triggerButton))
+        { GetDownTrigger(); }
 
         //if (OVRInput.GetUp(_triggerButton))
         //{ GetUpTrigger(); }
 
         if (IsHitRay())
         {
-            _hitTransform = _hit.transform;
+           _hitTransform = _hit.transform;
             DrawLaser(_hit.point);
             ObjectCasting();
         }
@@ -101,10 +101,10 @@ public class VRController : MonoBehaviour
         {
             DrawLaser(transform.forward * _rayLength);
 
-            //if (_castedObject != null)
-            //{
-            //    ExitCasting();
-            //}
+            if (_castedObject != null)
+            {
+                //ExitCasting();
+            }
         }
     }
 
@@ -131,7 +131,7 @@ public class VRController : MonoBehaviour
     {
         if (_targetType == Define.CatingType.RoadButton)
         {
-
+            _castedComponent.ExitInteract(this);
         }
         _castedObject = null;
     }
@@ -153,7 +153,7 @@ public class VRController : MonoBehaviour
 
         if (_targetType == Define.CatingType.RoadButton)
         {
-
+            _castedComponent.Interact(this);
         }
     }
 
@@ -173,5 +173,10 @@ public class VRController : MonoBehaviour
 
         }
         _castedObject = null;
+    }
+
+    public bool IsRightController()
+    {
+        return _isRight;
     }
 }

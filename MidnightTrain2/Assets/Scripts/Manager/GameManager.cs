@@ -13,14 +13,17 @@ public class GameManager : ManagerBase
     private GameObject _car;
 
     private Define.CarInfo[] _carInfos = new Define.CarInfo[12];
+    [SerializeField]
+    private List<Define.PathType> _canDrive = new List<Define.PathType>();
+    [SerializeField]
+    private TrafficLightController[] trafficLights = new TrafficLightController[12];
+
     private bool _isSetInfos;
     private float _timer;
 
-    private Define.PathType _pathType = Define.PathType.None;
-
     public bool _isAccident;
 
-    public int _start, _end;
+    private Define.PathType _pathType = Define.PathType.None;
 
     public override void Init()
     {
@@ -28,10 +31,13 @@ public class GameManager : ManagerBase
         _rightCars.Clear();
         _leftCars.Clear();
         _downCars.Clear();
+        _canDrive.Clear();
 
         _timer = 0;
 
         _isAccident = false;
+
+        SetTrafficLights();
     }
 
     private void Update()
@@ -40,7 +46,7 @@ public class GameManager : ManagerBase
         {
             if(_timer <= 0)
             {
-                _timer = Random.Range(0.5f, 1.5f);
+                _timer = Random.Range(1, 1.5f);
                 _pathType = SetPathType(Random.Range(0, 4), Random.Range(0, 4));
                 CreateCar(_pathType);
             }
@@ -51,12 +57,34 @@ public class GameManager : ManagerBase
         }
     }
 
+    private void SetTrafficLights()
+    {
+        string[] canvas = { "Up", "Right", "Down", "Left" };
+        string[] light = { "Up", "Down", "Right", "Left" };
+        string[] parents = { "", "Button" };
+        int index = 0;
+
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                if (canvas[i] == light[j])
+                {
+                    continue;
+                }
+
+                parents[0] = canvas[i] + "Canvas";
+                trafficLights[index] = Manager._find.FindUI(light[j], parents).GetComponent<TrafficLightController>();
+                index++;
+            }
+        }
+    }
+
     public void SetPath(Define.CarInfo[] arr)
     {
         _carInfos = arr;
         _isSetInfos = true;
     }
-
 
     private Define.PathType SetPathType(int _startDir, int _endDir)
     {
@@ -160,7 +188,30 @@ public class GameManager : ManagerBase
         }
 
         _car = ResourcesManager.Load(Define.CarSourcePath);
-        _car.GetComponent<CarController>().Init(_carInfos[(int)type], arrowDir);
+        _car.GetComponent<CarController>().Init(_carInfos[(int)type], type, arrowDir);
+    }
+
+    public void AddPath(Define.PathType type)
+    {
+        if (!_canDrive.Contains(type))
+        {
+            _canDrive.Add(type);
+            trafficLights[(int)type].OnLight();
+        }
+    }
+
+    public void RemovePath(Define.PathType type)
+    {
+        if (_canDrive.Contains(type))
+        {
+            _canDrive.Remove(type);
+            trafficLights[(int)type].OffLight();
+        }
+    }
+
+    public bool IsCanDrive(Define.PathType type)
+    {
+        return (_canDrive.Contains(type));
     }
 
     public void GameOver()

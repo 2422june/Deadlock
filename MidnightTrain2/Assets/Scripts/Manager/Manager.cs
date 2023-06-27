@@ -8,6 +8,7 @@ public class Manager : MonoBehaviour
     public static SoundManager _sound;
     public static FindManager _find;
     public static PathManager _path;
+    public static TrafficManager _traffic;
     public static Transform _player;
 
     T Init<T>() where T : ManagerBase
@@ -25,8 +26,7 @@ public class Manager : MonoBehaviour
 
         _game = Init<GameManager>();
         _path = Init<PathManager>();
-        //_trainFinder = Init<TrainFinder>();
-        //_train = Init<TrainController>();
+        _traffic = Init<TrafficManager>();
         //_sound = Init<SoundManager>();
     }
 }
