@@ -8,8 +8,6 @@ public class PathManager : ManagerBase
 {
     private Define.CarInfo[] _carInfos = new Define.CarInfo[12];
 
-    int Up = 0, Right = 1, Down = 2, Left = 3;
-
     int UP2Down = 0, UP2Right = 1, UP2Left = 2,
         Right2Up = 3, Right2Down = 4, Right2Left = 5,
         Down2Up = 6, Down2Right = 7, Down2Left = 8,
@@ -22,17 +20,8 @@ public class PathManager : ManagerBase
     public string[] _pointType = { "", "SpawnPoint", "CenterPoint", "EndPoint" };
     private Vector3[,] _points = new Vector3[4, 5];
 
-    private Transform _rootTransform;
-
-    [SerializeField]
-    private Button _startButton, _endButton, _goButton, _accidentButton;
-    private TMP_Text _startButtonTxt, _endButtonTxt;
-
-    int _startButtonDir, _endButtonDir;
-
     public override void Init()
     {
-        _rootTransform = GameObject.Find("@DynamicObjects").transform;
 
         SetPoint();
 
@@ -41,74 +30,12 @@ public class PathManager : ManagerBase
         SetStartDownPath();
         SetStartLeftPath();
 
-        InitButton();
-        InitText();
-
-        _startButtonDir = Up;
-        _endButtonDir = Right;
-        _startButtonTxt.text = GetDirText(_startButtonDir);
-        _endButtonTxt.text = GetDirText(_endButtonDir);
-
         Manager._game.SetPath(_carInfos);
-    }
-
-    private void InitButton()
-    {
-        string[] parents = { "TestButton" };
-        _startButton = Manager._find.FindUI<Button>("Start", parents, Manager._player);
-        _endButton = Manager._find.FindUI<Button>("End", parents, Manager._player);
-        _goButton = Manager._find.FindUI<Button>("Go", parents, Manager._player);
-        _accidentButton = Manager._find.FindUI<Button>("Accident", parents, Manager._player);
-
-        _startButton.onClick.AddListener(OnClickStartButton);
-        _endButton.onClick.AddListener(OnClickEndButton);
-    }
-
-    private void InitText()
-    {
-        _startButtonTxt = _startButton.GetComponentInChildren<TMP_Text>();
-        _endButtonTxt = _endButton.GetComponentInChildren<TMP_Text>();
-    }
-
-    private void OnClickStartButton()
-    {
-        _startButtonDir = (_startButtonDir + 1) % 4;
-        if (_startButtonDir == _endButtonDir)
-        {
-            _startButtonDir = (_startButtonDir + 1) % 4;
-        }
-        _startButtonTxt.text = GetDirText(_startButtonDir);
-    }
-
-    private void OnClickEndButton()
-    {
-        _endButtonDir = (_endButtonDir + 1) % 4;
-        if (_endButtonDir == _startButtonDir)
-        {
-            _endButtonDir = (_endButtonDir + 1) % 4;
-        }
-        _endButtonTxt.text = GetDirText(_endButtonDir);
-    }
-
-    private string GetDirText(int dir)
-    {
-        switch (dir)
-        {
-            case 0:
-                return "UP";
-            case 1:
-                return "RIGHT";
-            case 2:
-                return "DOWN";
-            case 3:
-                return "LEFT";
-        }
-
-        return "";
     }
 
     private void SetPoint()
     {
+        Transform _rootTransform = GameObject.Find("@DynamicObjects").transform;
         Transform pointParent, point;
 
         for (int pointType = 1; pointType <= 3; pointType++)

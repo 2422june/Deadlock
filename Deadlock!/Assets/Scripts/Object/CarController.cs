@@ -8,13 +8,8 @@ public class CarController : MonoBehaviour
     [SerializeField]
     private Vector3[] _path = new Vector3[4];
 
-    private Vector3 _dir, _rot;
+    private Vector3 _dir;
     private Transform _arrow;
-
-    float _rotStep;
-    float _destRot;
-    float _rotValue;
-    float _moveStep;
 
     [SerializeField]
     private int _pathIndex;
@@ -34,7 +29,6 @@ public class CarController : MonoBehaviour
 
         transform.position = _path[0];
         transform.LookAt(transform.position + _dir);
-        _rot = transform.rotation.eulerAngles;
 
         _moveSpeed = 10f;
         _pathIndex = 0;
@@ -53,11 +47,6 @@ public class CarController : MonoBehaviour
     {
         if (!_isMovable)
             return;
-
-        //_destRot = 90 - Mathf.Atan2((_path[_pathIndex] - transform.position).z, (_path[_pathIndex] - transform.position).x);
-        //_rot.y = _destRot;
-        //_rot = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_rot), 1f).eulerAngles;
-        //transform.rotation = Quaternion.Euler(_rot);
         transform.LookAt(_path[_pathIndex]);
         
         Vector3 rayL, rayR, rayM;
@@ -85,8 +74,6 @@ public class CarController : MonoBehaviour
     private void SetNextDestination()
     {
         transform.position = _path[_pathIndex];
-        //transform.LookAt(_path[_pathIndex]);
-        _rot = transform.rotation.eulerAngles;
         _pathIndex++;
 
         if (_pathIndex >= 4)
